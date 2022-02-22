@@ -25,8 +25,16 @@ app.get('/api/weather', function (req, res) {
         res.status(400).send("Please Enter City");
         return;
     }
-    geocode(req.query.city, function (data) {
-        forecast(data, function (result) {
+    geocode(req.query.city, function (error, data) {
+        if(error){
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+        forecast(data, function (error, result) {
+            if(error){
+                res.status(500).send("Internal Server Error");
+                return;
+            }
             res.status(200).send(result);
         })
     })
