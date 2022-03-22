@@ -1,3 +1,4 @@
+require("dotenv/config");
 const forecast = require("./utils/forecast");
 const geocode = require("./utils/geocode");
 
@@ -5,11 +6,15 @@ const express = require("express");
 const hbs = require("hbs");
 const path = require("path");
 const app = express();
+const morgan = require('morgan');
+
 
 //setup code
 const publicDirectoryPath = path.join(__dirname, "../public");
 const viewPath = path.join(__dirname, "../templates/views");//registration
 const partialPath = path.join(__dirname, "../templates/partials");
+
+const port = process.env.PORT;
 
 //setup handle bar:
 app.set("view engine", "hbs");
@@ -17,6 +22,7 @@ app.set("views", viewPath);
 
 //setup static directory:
 app.use(express.static(publicDirectoryPath));
+app.use(morgan('tiny'));
 hbs.registerPartials(partialPath);
 
 //api to find weather
@@ -59,6 +65,6 @@ app.get("/", function (req, res) {
     });
 });
 
-app.listen(3000, function () {
+app.listen(port, function () {
     console.log("The Server Is Up on Port 3000");
 });
